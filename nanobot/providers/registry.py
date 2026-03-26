@@ -181,6 +181,18 @@ PROVIDERS: tuple[ProviderSpec, ...] = (
         strip_model_prefix=True,
     ),
 
+    # Tencent Coding Plan (腾讯混元 Coding Plan): OpenAI-compatible gateway
+    ProviderSpec(
+        name="tencent_coding_plan",
+        keywords=("tencent-plan",),
+        env_key="OPENAI_API_KEY",
+        display_name="Tencent Coding Plan",
+        backend="openai_compat",
+        is_gateway=True,
+        default_api_base="https://api.lkeap.cloud.tencent.com/coding/v3",
+        strip_model_prefix=True,
+    ),
+
 
     # === Standard providers (matched by model-name keywords) ===============
     # Anthropic: native Anthropic SDK
