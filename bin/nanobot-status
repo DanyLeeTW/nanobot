@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Show nanobot status (works with both Docker Compose and Apple Container)
+set -euo pipefail
+
+if command -v container &>/dev/null && container list 2>/dev/null | grep -q nanobot-gateway; then
+    container exec nanobot-gateway /usr/local/bin/nanobot status
+elif command -v docker &>/dev/null; then
+    docker compose --profile cli run --rm nanobot-status
+else
+    echo "Error: neither Apple Container nor Docker found" >&2
+    exit 1
+fi

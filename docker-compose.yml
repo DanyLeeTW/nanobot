@@ -22,10 +22,16 @@ services:
           cpus: '0.25'
           memory: 256M
   
-  nanobot-cli:
+  nanobot-status:
     <<: *common-config
     profiles:
       - cli
     command: ["status"]
+
+  nanobot-chat:
+    <<: *common-config
+    profiles:
+      - cli
+    command: ["agent"]
     stdin_open: true
     tty: true

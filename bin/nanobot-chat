@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# Chat with the nanobot agent (works with both Docker Compose and Apple Container)
+set -euo pipefail
+
+# Detect single-message mode (-m/--message) vs interactive mode
+EXEC_FLAGS="-it"
+for arg in "$@"; do
+    if [[ "$arg" == "-m" || "$arg" == "--message" ]]; then
+        EXEC_FLAGS=""
+        break
+    fi
+done
+
+# Apple Container
+if command -v container &>/dev/null; then
+    if container list 2>/dev/null | grep -q nanobot-gateway; then
+        # shellcheck disable=SC2086
+        container exec $EXEC_FLAGS nanobot-gateway /usr/local/bin/nanobot agent "$@"
+        exit $?
+    fi
+    # Try to start a stopped container
+    if container list --all 2>/dev/null | grep -q nanobot-gateway; then
+        echo "Starting nanobot-gateway..."
+        container start nanobot-gateway >/dev/null 2>&1
+        sleep 3
+        # shellcheck disable=SC2086
+        container exec $EXEC_FLAGS nanobot-gateway /usr/local/bin/nanobot agent "$@"
+        exit $?
+    fi
+fi
+
+# Docker Compose fallback
+if command -v docker &>/dev/null && docker compose version &>/dev/null; then
+    docker compose --profile cli run --rm nanobot-chat "$@"
+    exit $?
+fi
+
+echo "Error: no running nanobot-gateway container found." >&2
+echo "Start it with: container start nanobot-gateway" >&2
+exit 1

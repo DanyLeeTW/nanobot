@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Tail nanobot gateway logs (works with both Docker Compose and Apple Container)
+set -euo pipefail
+
+if command -v container &>/dev/null && container list 2>/dev/null | grep -q nanobot-gateway; then
+    container logs nanobot-gateway "$@"
+elif command -v docker &>/dev/null; then
+    docker compose logs -f nanobot-gateway "$@"
+else
+    echo "Error: neither Apple Container nor Docker found" >&2
+    exit 1
+fi
