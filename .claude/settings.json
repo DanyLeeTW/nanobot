@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(update-config)",
+      "Skill(update-config:*)",
+      "WebSearch",
+      "Edit(~/.claude/skills/analysis-system/**)",
+      "Edit(~/.claude/skills/anno-code/**)"
+    ],
+    "additionalDirectories": [
+      "/Users/danylee/.claude",
+      "/Users/danylee/.claude/skills"
+    ]
+  }
+}
